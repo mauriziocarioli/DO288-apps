@@ -1,26 +1,6 @@
-#!/bin/bash
-
-set -e
-
-source ${HTTPD_CONTAINER_SCRIPTS_PATH}/common.sh
-
-echo "---> Enabling s2i support in httpd24 image"
-
-config_s2i
-
-cp -Rf /tmp/src/*.html ./
-DATE=`date "+%b %d, %Y @ %H:%M %p"`
-echo "Page built on $DATE" >> ./info.html
-echo "Apache HTTP Server $HTTPD_VERSION" >> ./info.html
-
-echo "---> Installing application source"
-#cp -af /tmp/src/. ./
-rm -rf ./.hg ./.git ./.svn
-
-# Fix source directory permissions
-fix-permissions ./
-
-process_extending_files ${HTTPD_APP_ROOT}/src/httpd-post-assemble/ ${HTTPD_CONTAINER_SCRIPTS_PATH}/post-assemble/
-
-# Fix source directory permissions
-fix-permissions ./
+echo "Starting custom S2I build"
+cp /tmp/src/*.html ./
+echo "This is a custom build." > info.html
+echo "Starting S2I build"
+/usr/libexec/s2i/assemble
+echo "Ending S2I build"
