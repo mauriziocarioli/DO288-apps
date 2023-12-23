@@ -11,11 +11,11 @@ LABEL io.k8s.description="A basic Apache HTTP Server child image, uses ONBUILD" 
       io.openshift.tags="apache, httpd"
 
 # Change web server port to 8080
-RUN sed -i "s/Listen 80/Listen 8080/g" /etc/httpd/conf/httpd.conf
+RUN sed "s/Listen 80/Listen 8080/g" /etc/httpd/conf/httpd.conf
 
 # Permissions to allow container to run on OpenShift
-RUN chgrp -R 0 /var/log/httpd /var/run/httpd && \
-    chmod -R g=u /var/log/httpd /var/run/httpd
+RUN chgrp --recursive 0 /var/log/httpd /var/run/httpd && \
+    chmod --recursive g=u /var/log/httpd /var/run/httpd
 
 # Run as a non-privileged user
 USER 1001
